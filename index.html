@@ -1,240 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KAVITECH | Security & IT Solutions</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCTV Budget Calculator</title>
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
-
+<style>
     body {
-      background: #0b0b0b;
-      color: #eee;
+        font-family: Arial, sans-serif;
+        background: #0f172a;
+        color: white;
+        margin: 0;
     }
 
-    header {
-      background: #000;
-      color: #fff;
-      padding: 15px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 2px solid #ff6600;
+    .container {
+        max-width: 500px;
+        margin: 50px auto;
+        background: #1e293b;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.4);
     }
 
-    header h1 {
-      color: #ff6600;
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #38bdf8;
     }
 
-    nav a {
-      color: #fff;
-      margin-left: 20px;
-      text-decoration: none;
-      font-size: 14px;
+    label {
+        display: block;
+        margin-top: 15px;
+        font-weight: bold;
     }
 
-    .phone {
-      color: #ff6600;
-      font-weight: bold;
-      font-size: 16px;
-      margin-left: 20px;
+    select, input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border-radius: 6px;
+        border: none;
+        font-size: 14px;
     }
 
-    .hero {
-      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
-                  url('https://images.unsplash.com/photo-1581090700227-1e8c1dcbe0b3');
-      background-size: cover;
-      background-position: center;
-      padding: 120px 20px;
-      text-align: center;
+    button {
+        width: 100%;
+        margin-top: 20px;
+        padding: 12px;
+        background: #38bdf8;
+        border: none;
+        color: black;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 6px;
+        cursor: pointer;
     }
 
-    .hero h2 {
-      font-size: 42px;
-      color: #ff6600;
-      margin-bottom: 15px;
+    button:hover {
+        background: #0ea5e9;
     }
 
-    .hero p {
-      font-size: 18px;
-      margin-bottom: 20px;
+    .result {
+        margin-top: 20px;
+        padding: 15px;
+        background: #020617;
+        border-radius: 6px;
+        text-align: center;
+        font-size: 18px;
+        color: #22c55e;
     }
+</style>
 
-    .hero .phone-highlight {
-      font-size: 22px;
-      color: #fff;
-      background: #ff6600;
-      padding: 10px 20px;
-      border-radius: 5px;
-      display: inline-block;
-      margin-top: 10px;
-      font-weight: bold;
-    }
-
-    .btn {
-      display: inline-block;
-      background: #ff6600;
-      color: white;
-      padding: 12px 25px;
-      border-radius: 5px;
-      text-decoration: none;
-      margin-top: 20px;
-      font-weight: bold;
-    }
-
-    .services {
-      padding: 60px 20px;
-      text-align: center;
-    }
-
-    .services h2 {
-      color: #ff6600;
-      margin-bottom: 40px;
-    }
-
-    .service-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: center;
-    }
-
-    .card {
-      background: #111;
-      padding: 20px;
-      width: 280px;
-      border-radius: 10px;
-      border: 1px solid #ff6600;
-    }
-
-    .card h3 {
-      color: #ff6600;
-      margin-bottom: 10px;
-    }
-
-    .about {
-      background: #111;
-      padding: 60px 20px;
-      text-align: center;
-    }
-
-    .about h2 {
-      color: #ff6600;
-      margin-bottom: 20px;
-    }
-
-    .contact {
-      padding: 60px 20px;
-      text-align: center;
-    }
-
-    .contact h2 {
-      color: #ff6600;
-    }
-
-    .contact .big-phone {
-      font-size: 28px;
-      color: #fff;
-      background: #ff6600;
-      padding: 12px 25px;
-      display: inline-block;
-      border-radius: 6px;
-      margin-top: 15px;
-      font-weight: bold;
-    }
-
-    footer {
-      background: #000;
-      text-align: center;
-      padding: 15px;
-      color: #aaa;
-      border-top: 2px solid #ff6600;
-    }
-
-    /* Floating Call Button */
-    .call-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #ff6600;
-      color: white;
-      padding: 15px 20px;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: bold;
-      box-shadow: 0 0 10px rgba(255,102,0,0.7);
-    }
-
-  </style>
 </head>
-
 <body>
 
-<header>
-  <h1>KAVITECH</h1>
-  <nav>
-    <a href="#">Home</a>
-    <a href="#">Services</a>
-    <a href="#">Contact</a>
-    <span class="phone">📞 9095885007</span>
-  </nav>
-</header>
+<div class="container">
+    <h1>CCTV Budget Calculator</h1>
 
-<section class="hero">
-  <h2>Advanced CCTV & Security Solutions</h2>
-  <p>Protect your home & business with smart surveillance systems</p>
-  <div class="phone-highlight">📞 Call Now: 9095885007</div>
-  <br>
-  <a href="#" class="btn">Get Free Quote</a>
-</section>
+    <label>Camera Type</label>
+    <select id="cameraType" onchange="updateBrands()">
+        <option value="">Select Type</option>
+        <option value="ip">IP Camera</option>
+        <option value="hd">HD Camera</option>
+        <option value="wifi">WiFi Camera</option>
+        <option value="4g">4G/5G Camera</option>
+    </select>
 
-<section class="services">
-  <h2>Our Services</h2>
-  <div class="service-grid">
-    <div class="card">
-      <h3>CCTV Installation</h3>
-      <p>High-quality cameras with professional setup.</p>
-    </div>
-    <div class="card">
-      <h3>Security Systems</h3>
-      <p>DVR, NVR, remote monitoring solutions.</p>
-    </div>
-    <div class="card">
-      <h3>Desktop PCs</h3>
-      <p>Wide range of computers for office & personal use.</p>
-    </div>
-    <div class="card">
-      <h3>Laptops</h3>
-      <p>New & refurbished laptops at best prices.</p>
-    </div>
-  </div>
-</section>
+    <label>Brand</label>
+    <select id="brand">
+        <option>Select Brand</option>
+    </select>
 
-<section class="about">
-  <h2>Why Choose KAVITECH?</h2>
-  <p>
-    Reliable CCTV installation, affordable computers, and trusted service.
-    We deliver quality security and IT solutions tailored to your needs.
-  </p>
-</section>
+    <label>Number of Cameras</label>
+    <input type="number" id="qty" placeholder="Enter quantity">
 
-<section class="contact">
-  <h2>Contact Us Today</h2>
-  <p>Fast response for installation and inquiries</p>
-  <div class="big-phone">📞 9095885007</div>
-</section>
+    <button onclick="calculate()">Calculate Budget</button>
 
-<footer>
-  <p>© 2026 KAVITECH. All rights reserved.</p>
-</footer>
+    <div class="result" id="result">Total: ₹0</div>
+</div>
 
-<a href="tel:9095885007" class="call-btn">📞 Call</a>
+<script>
+function updateBrands() {
+    const type = document.getElementById("cameraType").value;
+    const brand = document.getElementById("brand");
+
+    brand.innerHTML = "";
+
+    let brandsList = [];
+
+    if (type === "ip" || type === "hd") {
+        brandsList = ["CP PLUS", "DAHUA", "HIKVISION", "KHIHVISION"];
+    } else if (type === "wifi") {
+        brandsList = ["CP PLUS", "HIKVISION"];
+    } else if (type === "4g") {
+        brandsList = ["HIKVISION", "DAHUA"];
+    }
+
+    brandsList.forEach(b => {
+        let option = document.createElement("option");
+        option.text = b;
+        option.value = b;
+        brand.add(option);
+    });
+}
+
+function calculate() {
+    const type = document.getElementById("cameraType").value;
+    const qty = document.getElementById("qty").value;
+
+    if (!type || !qty) {
+        alert("Please select all fields");
+        return;
+    }
+
+    let pricePerCamera = 0;
+
+    if (type === "ip") pricePerCamera = 3000;
+    if (type === "hd") pricePerCamera = 1500;
+    if (type === "wifi") pricePerCamera = 2500;
+    if (type === "4g") pricePerCamera = 4000;
+
+    let total = pricePerCamera * qty;
+
+    document.getElementById("result").innerText = "Total: ₹" + total;
+}
+</script>
 
 </body>
 </html>
