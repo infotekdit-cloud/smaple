@@ -3,146 +3,190 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CCTV Budget Calculator</title>
+<title>Kavitech CCTV Calculator</title>
 
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background: #0f172a;
-        color: white;
-        margin: 0;
-    }
+body {
+    font-family: Arial;
+    background: #0f172a;
+    color: white;
+}
 
-    .container {
-        max-width: 500px;
-        margin: 50px auto;
-        background: #1e293b;
-        padding: 25px;
-        border-radius: 10px;
-        box-shadow: 0 0 20px rgba(0,0,0,0.4);
-    }
+.container {
+    max-width: 500px;
+    margin: 30px auto;
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 10px;
+}
 
-    h1 {
-        text-align: center;
-        margin-bottom: 20px;
-        color: #38bdf8;
-    }
+h1 { text-align:center; color:#38bdf8; }
 
-    label {
-        display: block;
-        margin-top: 15px;
-        font-weight: bold;
-    }
+input, select {
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    border-radius:6px;
+    border:none;
+}
 
-    select, input {
-        width: 100%;
-        padding: 10px;
-        margin-top: 5px;
-        border-radius: 6px;
-        border: none;
-        font-size: 14px;
-    }
+button {
+    width:100%;
+    padding:12px;
+    margin-top:15px;
+    border:none;
+    border-radius:6px;
+    background:#38bdf8;
+    font-weight:bold;
+    cursor:pointer;
+}
 
-    button {
-        width: 100%;
-        margin-top: 20px;
-        padding: 12px;
-        background: #38bdf8;
-        border: none;
-        color: black;
-        font-size: 16px;
-        font-weight: bold;
-        border-radius: 6px;
-        cursor: pointer;
-    }
+.result {
+    margin-top:15px;
+    padding:10px;
+    background:black;
+    text-align:center;
+    border-radius:6px;
+}
 
-    button:hover {
-        background: #0ea5e9;
-    }
+/* QR */
+.qr-box {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 150px;
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+}
 
-    .result {
-        margin-top: 20px;
-        padding: 15px;
-        background: #020617;
-        border-radius: 6px;
-        text-align: center;
-        font-size: 18px;
-        color: #22c55e;
-    }
+.qr-box img { width:100%; }
+
 </style>
-
 </head>
+
 <body>
 
 <div class="container">
-    <h1>CCTV Budget Calculator</h1>
+<h1>Kavitech CCTV Calculator</h1>
 
-    <label>Camera Type</label>
-    <select id="cameraType" onchange="updateBrands()">
-        <option value="">Select Type</option>
-        <option value="ip">IP Camera</option>
-        <option value="hd">HD Camera</option>
-        <option value="wifi">WiFi Camera</option>
-        <option value="4g">4G/5G Camera</option>
-    </select>
+<input type="text" id="name" placeholder="Customer Name">
+<input type="tel" id="phone" placeholder="WhatsApp Number">
 
-    <label>Brand</label>
-    <select id="brand">
-        <option>Select Brand</option>
-    </select>
+<select id="cameraType" onchange="updateBrands()">
+<option value="">Camera Type</option>
+<option value="IP Camera">IP Camera</option>
+<option value="HD Camera">HD Camera</option>
+<option value="WiFi Camera">WiFi Camera</option>
+<option value="4G Camera">4G/5G Camera</option>
+</select>
 
-    <label>Number of Cameras</label>
-    <input type="number" id="qty" placeholder="Enter quantity">
+<select id="brand"></select>
 
-    <button onclick="calculate()">Calculate Budget</button>
+<input type="number" id="qty" placeholder="No. of Cameras">
 
-    <div class="result" id="result">Total: ₹0</div>
+<button onclick="calculate()">Calculate</button>
+
+<div class="result" id="result">Total: ₹0</div>
+
+<button onclick="sendWhatsApp()">Send Invoice via WhatsApp</button>
+
+</div>
+
+<div class="qr-box">
+<img id="qrImage">
+<button onclick="payNow()">Pay</button>
 </div>
 
 <script>
+const upiID = "infotek.dit@okicici";
+const businessName = "Kavitech";
+
+// Brand logic
 function updateBrands() {
     const type = document.getElementById("cameraType").value;
     const brand = document.getElementById("brand");
-
     brand.innerHTML = "";
 
-    let brandsList = [];
-
-    if (type === "ip" || type === "hd") {
-        brandsList = ["CP PLUS", "DAHUA", "HIKVISION", "KHIHVISION"];
-    } else if (type === "wifi") {
-        brandsList = ["CP PLUS", "HIKVISION"];
-    } else if (type === "4g") {
-        brandsList = ["HIKVISION", "DAHUA"];
-    }
-
-    brandsList.forEach(b => {
-        let option = document.createElement("option");
-        option.text = b;
-        option.value = b;
-        brand.add(option);
+    let list = ["CP PLUS","DAHUA","HIKVISION","KHIHVISION"];
+    list.forEach(b=>{
+        let opt=document.createElement("option");
+        opt.text=b;
+        brand.add(opt);
     });
 }
 
+// Generate UPI
+function generateUPI(amount) {
+    const link = `upi://pay?pa=${upiID}&pn=${businessName}&am=${amount}&cu=INR`;
+    const qr = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(link)}`;
+
+    document.getElementById("qrImage").src = qr;
+    window.upiLink = link;
+}
+
+// Calculate
 function calculate() {
     const type = document.getElementById("cameraType").value;
     const qty = document.getElementById("qty").value;
 
-    if (!type || !qty) {
-        alert("Please select all fields");
+    let price = 0;
+    if(type==="IP Camera") price=3000;
+    if(type==="HD Camera") price=1500;
+    if(type==="WiFi Camera") price=2500;
+    if(type==="4G Camera") price=4000;
+
+    let total = price * qty;
+
+    document.getElementById("result").innerText = "Total: ₹"+total;
+
+    window.totalAmount = total;
+
+    generateUPI(total);
+}
+
+// Pay
+function payNow() {
+    if(!window.upiLink){
+        alert("Calculate first");
+        return;
+    }
+    window.location.href = window.upiLink;
+}
+
+// WhatsApp Invoice
+function sendWhatsApp() {
+    const name = document.getElementById("name").value;
+    const phone = document.getElementById("phone").value;
+    const type = document.getElementById("cameraType").value;
+    const brand = document.getElementById("brand").value;
+    const qty = document.getElementById("qty").value;
+    const total = window.totalAmount;
+
+    if(!name || !phone || !total){
+        alert("Fill all details & calculate");
         return;
     }
 
-    let pricePerCamera = 0;
+    const message =
+`Hello ${name},
 
-    if (type === "ip") pricePerCamera = 3000;
-    if (type === "hd") pricePerCamera = 1500;
-    if (type === "wifi") pricePerCamera = 2500;
-    if (type === "4g") pricePerCamera = 4000;
+*KAVITECH CCTV QUOTATION*
 
-    let total = pricePerCamera * qty;
+Camera Type: ${type}
+Brand: ${brand}
+Quantity: ${qty}
 
-    document.getElementById("result").innerText = "Total: ₹" + total;
+Total Amount: ₹${total}
+
+Payment Link:
+${window.upiLink}
+
+Thank you!`;
+
+    const url = `https://wa.me/91${phone}?text=${encodeURIComponent(message)}`;
+
+    window.open(url, "_blank");
 }
 </script>
 
